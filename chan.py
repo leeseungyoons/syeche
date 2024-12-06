@@ -7,6 +7,7 @@ KAKAO_REST_API_KEY = "9f024f555b6a52a8c7437d577f7deb0f"
 
 NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
 NAVER_CLIENT_SECRET = "jdr3EuEGKg"
+GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
 
 
 def fetch_coordinates(address):
@@ -48,32 +49,47 @@ def fetch_restaurants(lat, lon):
         return []
 
 
+def fetch_naver_images(place_name):
+    url = "https://openapi.naver.com/v1/search/image"
+    headers = {
+        "X-Naver-Client-Id": NAVER_CLIENT_ID,
+        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
+    }
+    params = {"query": place_name, "display": 1}
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code == 200:
+        items = response.json().get('items', [])
+        if items:
+            return items[0]['link']
+    return "https://via.placeholder.com/150"
+
+
+def fetch_naver_reviews(place_name):
+    url = "https://openapi.naver.com/v1/search/blog.json"
+    headers = {
+        "X-Naver-Client-Id": NAVER_CLIENT_ID,
+        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
+    }
+    params = {"query": place_name, "display": 10}
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code == 200:
+        items = response.json().get('items', [])
+        reviews = [{"description": item['description'], "link": item['link']} for item in items]
+        return reviews
+    return []
+
+
+def filter_reviews(reviews):
+    ad_keywords = ["광고", "홍보", "할인", "이용권", "협찬", "제휴"]
+    filtered_reviews = [review for review in reviews if not any(keyword in review["description"] for keyword in ad_keywords)]
+    return filtered_reviews
+
+
 def kakao_map_iframe(lat, lon, places):
-    markers_script = ""
-    for place in places:
-        markers_script += f"""
-        new kakao.maps.Marker({{
-            map: map,
-            position: new kakao.maps.LatLng({place['y']}, {place['x']}),
-            title: "{place['place_name']}"
-        }});
-        """
-    
+    iframe_url = f"https://map.kakao.com/?urlLevel=3&map_type=TYPE_MAP&urlx={lon}&urly={lat}&map_attribute=ROADMAP"
     iframe_html = f"""
-    <iframe width="100%" height="700px" srcdoc="
-        <div id='map' style='width:100%;height:100%;'></div>
-        <script type='text/javascript' src='https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}&libraries=services'></script>
-        <script>
-            var container = document.getElementById('map');
-            var options = {{
-                center: new kakao.maps.LatLng({lat}, {lon}),
-                level: 3
-            }};
-            var map = new kakao.maps.Map(container, options);
-            {markers_script}
-        </script>" frameborder="0"></iframe>
+    <iframe width="100%" height="700" src="{iframe_url}" frameborder="0"></iframe>
     """
-    
     return iframe_html
 
 
