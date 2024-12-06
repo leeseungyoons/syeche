@@ -96,7 +96,7 @@ def kakao_map_iframe(lat, lon, places):
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
 
-address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소")
+address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
 
 restaurants = []
 
@@ -113,14 +113,15 @@ if restaurants:
     html(map_html, height=700, scrolling=True)
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
+    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; width: 100vw; margin: 0;'>", unsafe_allow_html=True)
     for restaurant in restaurants:
         naver_image = fetch_naver_images(restaurant['place_name'])
         reviews = fetch_naver_reviews(restaurant['place_name'])
         filtered_reviews = filter_reviews(reviews)
 
         st.markdown(f"""
-<div class="card" style="margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
-    <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0;">
+<div class="card" style="flex: 1 1 calc(45% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+    <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
         <p class="card-text"><strong>주소:</strong> {restaurant['road_address_name']}</p>
@@ -141,6 +142,7 @@ if restaurants:
     </div>
 </div>
 """, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 else:
     st.write("음식점을 찾을 수 없습니다.")
@@ -148,6 +150,14 @@ else:
 
 st.markdown("""
     <style>
+        .stTextInput>div>input {
+            width: 100vw;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+        }
         .stButton>button {
             width: 100%;
             height: 50px;
@@ -162,7 +172,16 @@ st.markdown("""
         .stButton>button:hover {
             background-color: #0056b3;
         }
+        .restaurant-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+            width: 100vw;
+            margin: 0;
+        }
         .card {
+            flex: 1 1 calc(45% - 20px);
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
