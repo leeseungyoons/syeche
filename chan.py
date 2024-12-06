@@ -7,11 +7,14 @@ KAKAO_REST_API_KEY = "9f024f555b6a52a8c7437d577f7deb0f"
 
 NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
 NAVER_CLIENT_SECRET = "jdr3EuEGKg"
-GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
+
 
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
-    headers = {"Authorization": f"KakaoAK {"9f024f555b6a52a8c7437d577f7deb0f"}"}
+    headers = {
+        "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}",
+        "User-Agent": "os/web origin/myapp"
+    }
     params = {"query": address}
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
@@ -21,12 +24,16 @@ def fetch_coordinates(address):
         else:
             st.error("주소를 찾을 수 없습니다.")
     else:
-        st.error(f"카카오코딩 API 요청 실패: {response.status_code}, 응답: {response.text}")
+        st.error(f"카카오 API 요청 실패: {response.status_code}, 응답: {response.text}")
     return None, None
+
 
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
-    headers = {"Authorization": f"KakaoAK {"9f024f555b6a52a8c7437d577f7deb0f"}"}
+    headers = {
+        "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}",
+        "User-Agent": "os/web origin/myapp"
+    }
     params = {
         "query": "음식점",
         "x": lon,
@@ -40,72 +47,35 @@ def fetch_restaurants(lat, lon):
         st.error(f"음식점 정보 API 요청 실패: {response.status_code}, 응답: {response.text}")
         return []
 
-def fetch_naver_images(place_name):
-    url = "https://openapi.naver.com/v1/search/image"
-    headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-    }
-    params = {"query": place_name, "display": 1}
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        items = response.json().get('items', [])
-        if items:
-            return items[0]['link']
-    return "https://via.placeholder.com/150"
 
-def fetch_naver_reviews(place_name):
-    url = "https://openapi.naver.com/v1/search/blog.json"
-    headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-    }
-    params = {"query": place_name, "display": 10}
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        items = response.json().get('items', [])
-        reviews = [{"description": item['description'], "link": item['link']} for item in items]
-        return reviews
-    return []
-
-def filter_reviews(reviews):
-    ad_keywords = ["광고", "홍보", "할인", "이용권", "협찬", "제휴"]
-    filtered_reviews = [review for review in reviews if not any(keyword in review for keyword in ad_keywords)]
-    return filtered_reviews
-
-def kakao_map_html(lat, lon, places):
-    places_script = ""
+def kakao_map_iframe(lat, lon, places):
+    markers_script = ""
     for place in places:
-        places_script += f"""
-        var marker = new kakao.maps.Marker({{
+        markers_script += f"""
+        new kakao.maps.Marker({{
             map: map,
-            position: new kakao.maps.LatLng({place['y']}, {place['x']})
-        }});
-        var infowindow = new kakao.maps.InfoWindow({{
-            content: '<div style="padding:5px;">{place['place_name']}</div>'
-        }});
-        kakao.maps.event.addListener(marker, 'mouseover', function() {{
-            infowindow.open(map, marker);
-        }});
-        kakao.maps.event.addListener(marker, 'mouseout', function() {{
-            infowindow.close();
+            position: new kakao.maps.LatLng({place['y']}, {place['x']}),
+            title: "{place['place_name']}"
         }});
         """
-
-    return f"""
-    <div id="map" style="width:100%;height:700px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);"></div>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={"ddae3c29210c477e6e296cbcb8b717a4"}"></script>
-
-    <script>
-        var container = document.getElementById('map');
-        var options = {{
-            center: new kakao.maps.LatLng({lat}, {lon}),
-            level: 3
-        }};
-        var map = new kakao.maps.Map(container, options);
-        {places_script}
-    </script>
+    
+    iframe_html = f"""
+    <iframe width="100%" height="700px" srcdoc="
+        <div id='map' style='width:100%;height:100%;'></div>
+        <script type='text/javascript' src='https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}&libraries=services'></script>
+        <script>
+            var container = document.getElementById('map');
+            var options = {{
+                center: new kakao.maps.LatLng({lat}, {lon}),
+                level: 3
+            }};
+            var map = new kakao.maps.Map(container, options);
+            {markers_script}
+        </script>" frameborder="0"></iframe>
     """
+    
+    return iframe_html
+
 
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
@@ -123,9 +93,8 @@ if st.button("🔍 그 근처 음식점 찾기"):
         restaurants = fetch_restaurants(lat, lon)
 
 if restaurants:
-    map_html = kakao_map_html(lat, lon, restaurants)
+    map_html = kakao_map_iframe(lat, lon, restaurants)
     html(map_html, height=700, scrolling=True)
-  
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
     for restaurant in restaurants:
@@ -204,4 +173,4 @@ st.markdown("""
             background-color: #0056b3;
         }
     </style>
-""", unsafe_allow_html=True)      
+""", unsafe_allow_html=True)
