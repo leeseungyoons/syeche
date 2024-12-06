@@ -112,7 +112,7 @@ if restaurants:
     map_html = kakao_map_iframe(lat, lon, restaurants)
     html(map_html, height=700, scrolling=True)
 
-    st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='margin-top: 20px;'> 주변 음식점 목록 : </h3>", unsafe_allow_html=True)
     st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; width: 100vw; margin: 0;'>", unsafe_allow_html=True)
     for restaurant in restaurants:
         naver_image = fetch_naver_images(restaurant['place_name'])
@@ -124,9 +124,9 @@ if restaurants:
     <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
-        <p class="card-text"><strong>주소 : </strong> {restaurant['road_address_name']}</p>
-        <p class="card-text"><strong> 전화번호 📞 : </strong> {restaurant['phone']}</p>
-        <p class="card-text"><strong> 광고 없는 후기 : </strong></p>
+        <p class="card-text"><strong>  주소  :  </strong> {restaurant['road_address_name']}</p>
+        <p class="card-text"><strong>  전화번호  📞  :  </strong> {restaurant['phone']}</p>
+        <p class="card-text"><strong>  광고 없는 후기  :  </strong></p>
         <ul>
             {''.join([f'<li>{review["description"]} <a href="{review["link"]}" target="_blank" style="color: #007BFF; text-decoration: underline;">후기 자세히 보기</a></li>' for review in filtered_reviews[:3]])}
         </ul>
