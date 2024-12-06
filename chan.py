@@ -120,7 +120,7 @@ if restaurants:
         filtered_reviews = filter_reviews(reviews)
 
         st.markdown(f"""
-<div class="card" style="flex: 1 1 calc(33% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+<div class="card" style="flex: 1 1 calc(45% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
     <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
@@ -171,7 +171,7 @@ st.markdown("""
             justify-content: space-around;
         }
         .card {
-            flex: 1 1 calc(33% - 20px);
+            flex: 1 1 calc(45% - 20px);
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
