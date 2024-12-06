@@ -174,4 +174,27 @@ st.markdown("""
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 12
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 10px;
+        }
+        .card-title {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .card-text {
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+""", unsafe_allow_html=True)
