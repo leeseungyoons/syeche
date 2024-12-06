@@ -96,7 +96,7 @@ def kakao_map_iframe(lat, lon, places):
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
 
-address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", max_chars=200, key='address_input', label_visibility='collapsed', value='', help='검색하고 싶은 주소를 입력하세요', placeholder='예: 강남구 테헤란로 123', label_suffix=None, label_help='주소를 입력하고 검색 버튼을 눌러주세요', use_container_width=True)
+address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
 
 restaurants = []
 
