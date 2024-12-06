@@ -7,13 +7,13 @@ KAKAO_REST_API_KEY = "9f024f555b6a52a8c7437d577f7deb0f"
 
 NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
 NAVER_CLIENT_SECRET = "jdr3EuEGKg"
-GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
+
 
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
     headers = {
-        "Authorization": f"KakaoAK {KAKAO_API_KEY}",
-        "KA": "sdk/1.0.0 os/javascript lang/en device/pc"
+        "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}",
+        "User-Agent": "os/web origin/myapp"
     }
     params = {"query": address}
     response = requests.get(url, headers=headers, params=params)
@@ -27,17 +27,18 @@ def fetch_coordinates(address):
         st.error(f"카카오 API 요청 실패: {response.status_code}, 응답: {response.text}")
     return None, None
 
+
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
     headers = {
-        "Authorization": f"KakaoAK {KAKAO_API_KEY}",
-        "KA": "sdk/1.0.0 os/javascript lang/en device/pc"
+        "Authorization": f"KakaoAK {KAKAO_REST_API_KEY}",
+        "User-Agent": "os/web origin/myapp"
     }
     params = {
         "query": "음식점",
         "x": lon,
         "y": lat,
-        "radius": 2000
+        "radius": 2000  
     }
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
@@ -45,6 +46,7 @@ def fetch_restaurants(lat, lon):
     else:
         st.error(f"음식점 정보 API 요청 실패: {response.status_code}, 응답: {response.text}")
         return []
+
 
 def fetch_naver_images(place_name):
     url = "https://openapi.naver.com/v1/search/image"
