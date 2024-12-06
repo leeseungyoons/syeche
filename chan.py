@@ -113,14 +113,14 @@ if restaurants:
     html(map_html, height=700, scrolling=True)
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
-    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; width: 100%;'>", unsafe_allow_html=True)
+    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; max-width: 1200px; margin: 0 auto;'>", unsafe_allow_html=True)
     for restaurant in restaurants:
         naver_image = fetch_naver_images(restaurant['place_name'])
         reviews = fetch_naver_reviews(restaurant['place_name'])
         filtered_reviews = filter_reviews(reviews)
 
         st.markdown(f"""
-<div class="card" style="flex: 1 1 calc(48% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+<div class="card" style="flex: 1 1 calc(45% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
     <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
@@ -168,11 +168,13 @@ st.markdown("""
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .card {
-            flex: 1 1 calc(48% - 20px);
+            flex: 1 1 calc(45% - 20px);
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
