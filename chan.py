@@ -11,7 +11,9 @@ GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
 
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
-    headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
+    headers = {
+        "Authorization": f"KakaoAK {KAKAO_API_KEY}"
+    }
     params = {"query": address}
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
@@ -26,7 +28,9 @@ def fetch_coordinates(address):
 
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
-    headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
+    headers = {
+        "Authorization": f"KakaoAK {KAKAO_API_KEY}"
+    }
     params = {
         "query": "음식점",
         "x": lon,
@@ -69,7 +73,7 @@ def fetch_naver_reviews(place_name):
     return []
 
 def filter_reviews(reviews):
-    ad_keywords = ["광고", "화보", "할인", "이용권", "협첹", "제휴"]
+    ad_keywords = ["광고", "화보", "할인", "이용권", "협첩", "제휴"]
     filtered_reviews = [review for review in reviews if not any(keyword in review['description'] for keyword in ad_keywords)]
     return filtered_reviews
 
