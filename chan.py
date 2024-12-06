@@ -94,7 +94,8 @@ def kakao_map_html(lat, lon, places):
 
     return f"""
     <div id="map" style="width:100%;height:700px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);"></div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}"></script>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={"ddae3c29210c477e6e296cbcb8b717a4"}"></script>
+
     <script>
         var container = document.getElementById('map');
         var options = {{
