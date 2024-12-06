@@ -12,7 +12,8 @@ GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
     headers = {
-        "Authorization": f"KakaoAK {KAKAO_API_KEY}"
+        "Authorization": f"KakaoAK {KAKAO_API_KEY}",
+        "KA": "sdk/1.0.0 os/javascript lang/en device/pc"
     }
     params = {"query": address}
     response = requests.get(url, headers=headers, params=params)
@@ -29,7 +30,8 @@ def fetch_coordinates(address):
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
     headers = {
-        "Authorization": f"KakaoAK {KAKAO_API_KEY}"
+        "Authorization": f"KakaoAK {KAKAO_API_KEY}",
+        "KA": "sdk/1.0.0 os/javascript lang/en device/pc"
     }
     params = {
         "query": "음식점",
@@ -73,7 +75,7 @@ def fetch_naver_reviews(place_name):
     return []
 
 def filter_reviews(reviews):
-    ad_keywords = ["광고", "화보", "할인", "이용권", "협첩", "제휴"]
+    ad_keywords = ["광고", "화보", "할인", "이용권", "협찬", "제휴"]
     filtered_reviews = [review for review in reviews if not any(keyword in review['description'] for keyword in ad_keywords)]
     return filtered_reviews
 
@@ -98,7 +100,7 @@ def kakao_map_html(lat, lon, places):
 
     return f"""
     <div id="map" style="width:100%;height:700px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);"></div>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}"></script>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}&libraries=services"></script>
 
     <script>
         var container = document.getElementById('map');
