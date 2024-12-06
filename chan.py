@@ -113,7 +113,7 @@ if restaurants:
     html(map_html, height=700, scrolling=True)
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
-    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; width: 100%; margin: 0 auto;'>", unsafe_allow_html=True)
+    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; width: 100vw; margin: 0;'>", unsafe_allow_html=True)
     for restaurant in restaurants:
         naver_image = fetch_naver_images(restaurant['place_name'])
         reviews = fetch_naver_reviews(restaurant['place_name'])
@@ -151,34 +151,13 @@ else:
 st.markdown("""
     <style>
         .stTextInput>div>input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        <style>
-        .stTextInput>div>input {
             width: 100vw;
-            max-width: 100%;
             padding: 10px;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
         }
-        <style>
-        .stTextInput>div>input {
-            width: 100%;
-            max-width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        <style>
         .stButton>button {
             width: 100%;
             height: 50px;
@@ -194,20 +173,12 @@ st.markdown("""
             background-color: #0056b3;
         }
         .restaurant-container {
-            width: 100vw;
-            max-width: 100%;
-            padding: 0 20px;
-            .restaurant-container {
-            width: 100%;
-            max-width: 100vw;
-            padding: 0 20px;
-            .restaurant-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: flex-start;
-            width: 100%;
-            margin: 0 auto;
+            width: 100vw;
+            margin: 0;
         }
         .card {
             flex: 1 1 calc(45% - 20px);
