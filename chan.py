@@ -113,14 +113,15 @@ if restaurants:
     html(map_html, height=700, scrolling=True)
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
+    st.markdown("<div class='restaurant-container' style='display: flex; flex-wrap: wrap; gap: 20px;'>", unsafe_allow_html=True)
     for restaurant in restaurants:
         naver_image = fetch_naver_images(restaurant['place_name'])
         reviews = fetch_naver_reviews(restaurant['place_name'])
         filtered_reviews = filter_reviews(reviews)
 
         st.markdown(f"""
-<div class="card" style="margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
-    <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0;">
+<div class="card" style="flex: 1 1 calc(50% - 20px); margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
+    <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
         <p class="card-text"><strong>주소:</strong> {restaurant['road_address_name']}</p>
@@ -141,6 +142,7 @@ if restaurants:
     </div>
 </div>
 """, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 else:
     st.write("음식점을 찾을 수 없습니다.")
@@ -162,31 +164,14 @@ st.markdown("""
         .stButton>button:hover {
             background-color: #0056b3;
         }
+        .restaurant-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
         .card {
+            flex: 1 1 calc(50% - 20px);
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .card-body {
-            padding: 10px;
-        }
-        .card-title {
-            font-weight: bold;
-            color: #007BFF;
-        }
-        .card-text {
-            margin-bottom: 10px;
-        }
-        .btn-primary {
-            text-decoration: none;
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-    </style>
-""", unsafe_allow_html=True)
+            box-shadow: 0px 4px 12
