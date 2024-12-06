@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit.components.v1 import html
 import requests
 
-KAKAO_API_KEY = "ddae3c29210c477e6e296cb8b717a4"
+KAKAO_API_KEY = "ddae3c29210c477e6e296cbcb8b717a4"
 KAKAO_REST_API_KEY = "9f024f555b6a52a8c7437d577f7deb0f"
 
 NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
