@@ -11,7 +11,7 @@ GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
 
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
-    headers = {"Authorization": f"KakaoAK {KAKAO_REST_API_KEY}"}
+    headers = {"Authorization": f"KakaoAK {"9f024f555b6a52a8c7437d577f7deb0f"}"}
     params = {"query": address}
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
@@ -26,7 +26,7 @@ def fetch_coordinates(address):
 
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
-    headers = {"Authorization": f"KakaoAK {KAKAO_REST_API_KEY}"}
+    headers = {"Authorization": f"KakaoAK {"9f024f555b6a52a8c7437d577f7deb0f"}"}
     params = {
         "query": "음식점",
         "x": lon,
