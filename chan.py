@@ -124,7 +124,8 @@ if st.button("🔍 그 근처 음식점 찾기"):
 
 if restaurants:
     map_html = kakao_map_html(lat, lon, restaurants)
-    html(map_html, height=700)  
+    html(map_html, height=700, scrolling=True)
+  
 
     st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
     for restaurant in restaurants:
