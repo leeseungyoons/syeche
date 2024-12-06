@@ -93,18 +93,18 @@ def kakao_map_iframe(lat, lon, places):
     return iframe_html
 
 
-st.title("🍽️ 음식점 찾는 앱")
-st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
+st.title("🍽️❣️ 당신의 후회 없는 맛집을 찾아드립니다 ❣️🍽️")
+st.markdown("<p style='font-size: 16px;'>‼️ 가까운 맛집을 찾아보세요‼️지도를 통해 위치를 확인하고 맛 정보를 확인할 수 있습니다‼️</p>", unsafe_allow_html=True)
 
-address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
+address = st.text_input("‼️ 상세한 주소를 입력해주세요 ‼️ : XX 동 XX 구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
 
 restaurants = []
 
-if st.button("🔍 그 근처 음식점 찾기"):
+if st.button("🔍 그 근처 찐맛집 찾기 🔍"):
     lat, lon = fetch_coordinates(address)
 
     if lat is None or lon is None:
-        st.error("유효한 주소를 입력해주세요.")
+        st.error("⁉유효한 주소를 입력해주시겠어요❓")
     else:
         restaurants = fetch_restaurants(lat, lon)
 
@@ -124,14 +124,14 @@ if restaurants:
     <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0; width: 100%; height: auto;">
     <div class="card-body">
         <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
-        <p class="card-text"><strong>주소:</strong> {restaurant['road_address_name']}</p>
-        <p class="card-text"><strong>전화번호:</strong> {restaurant['phone']}</p>
-        <p class="card-text"><strong>광고 없는 후기:</strong></p>
+        <p class="card-text"><strong>주소 : </strong> {restaurant['road_address_name']}</p>
+        <p class="card-text"><strong> 전화번호 📞 : </strong> {restaurant['phone']}</p>
+        <p class="card-text"><strong> 광고 없는 후기 : </strong></p>
         <ul>
             {''.join([f'<li>{review["description"]} <a href="{review["link"]}" target="_blank" style="color: #007BFF; text-decoration: underline;">후기 자세히 보기</a></li>' for review in filtered_reviews[:3]])}
         </ul>
         <details>
-            <summary>후기 더보기</summary>
+            <summary> 후기 더보기 </summary>
             <ul>
                 {''.join([f'<li>{review["description"]} <a href="{review["link"]}" target="_blank" style="color: #007BFF; text-decoration: underline;">후기 자세히 보기</a></li>' for review in filtered_reviews[3:]])}
             </ul>
@@ -145,7 +145,7 @@ if restaurants:
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    st.write("음식점을 찾을 수 없습니다.")
+    st.write(" 음식점을 찾을 수 없어요 😭 .")
 
 
 st.markdown("""
