@@ -1,12 +1,11 @@
 import streamlit as st
 from streamlit.components.v1 import html
 import requests
-import os
 
-# 환경 변수를 통해 API 키 설정 (배포 환경에서는 환경 변수 사용 권장)
-KAKAO_API_KEY = os.getenv("KAKAO_API_KEY", "YOUR_KAKAO_API_KEY")
-NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "YOUR_NAVER_CLIENT_ID")
-NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "YOUR_NAVER_CLIENT_SECRET")
+KAKAO_API_KEY = "ddae3c29210c477e6e296cb8b717a4"
+NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
+NAVER_CLIENT_SECRET = "jdr3EuEGKg"
+
 
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
@@ -23,6 +22,7 @@ def fetch_coordinates(address):
         st.error(f"카카오 API 요청 실패: {response.status_code}, 응답: {response.text}")
     return None, None
 
+
 def fetch_restaurants(lat, lon):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
     headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
@@ -30,7 +30,7 @@ def fetch_restaurants(lat, lon):
         "query": "음식점",
         "x": lon,
         "y": lat,
-        "radius": 2000  
+        "radius": 2000
     }
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
@@ -38,6 +38,7 @@ def fetch_restaurants(lat, lon):
     else:
         st.error(f"음식점 정보 API 요청 실패: {response.status_code}, 응답: {response.text}")
         return []
+
 
 def fetch_naver_images(place_name):
     url = "https://openapi.naver.com/v1/search/image"
@@ -53,6 +54,7 @@ def fetch_naver_images(place_name):
             return items[0]['link']
     return "https://via.placeholder.com/150"
 
+
 def fetch_naver_reviews(place_name):
     url = "https://openapi.naver.com/v1/search/blog.json"
     headers = {
@@ -67,10 +69,12 @@ def fetch_naver_reviews(place_name):
         return reviews
     return []
 
+
 def filter_reviews(reviews):
     ad_keywords = ["광고", "화보", "할인", "이용권", "협첹", "제휴"]
-    filtered_reviews = [review for review in reviews if not any(keyword in review for keyword in ad_keywords)]
+    filtered_reviews = [review for review in reviews if not any(keyword in review['description'] for keyword in ad_keywords)]
     return filtered_reviews
+
 
 def kakao_map_html(lat, lon, places):
     places_script = ""
@@ -93,7 +97,7 @@ def kakao_map_html(lat, lon, places):
 
     return f"""
     <div id="map" style="width:100%;height:700px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);"></div>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}&libraries=services"></script>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}"></script>
 
     <script>
         var container = document.getElementById('map');
@@ -105,6 +109,7 @@ def kakao_map_html(lat, lon, places):
         {places_script}
     </script>
     """
+
 
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
