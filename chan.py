@@ -96,7 +96,7 @@ def kakao_map_iframe(lat, lon, places):
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
 
-address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123', help='검색할 주소를 입력하세요', label_visibility='visible')
+address = st.text_input("📍 상세한 주소를 입력해주세요: XX동 XX구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
 
 restaurants = []
 
@@ -151,6 +151,15 @@ else:
 st.markdown("""
     <style>
         .stTextInput>div>input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        <style>
+        .stTextInput>div>input {
             width: 100vw;
             max-width: 100%;
             padding: 10px;
@@ -185,6 +194,10 @@ st.markdown("""
             background-color: #0056b3;
         }
         .restaurant-container {
+            width: 100vw;
+            max-width: 100%;
+            padding: 0 20px;
+            .restaurant-container {
             width: 100%;
             max-width: 100vw;
             padding: 0 20px;
