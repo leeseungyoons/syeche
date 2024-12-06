@@ -48,39 +48,6 @@ def fetch_restaurants(lat, lon):
         return []
 
 
-def fetch_naver_images(place_name):
-    url = "https://openapi.naver.com/v1/search/image"
-    headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-    }
-    params = {"query": place_name, "display": 1}
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        items = response.json().get('items', [])
-        if items:
-            return items[0]['link']
-    return "https://via.placeholder.com/150"
-
-def fetch_naver_reviews(place_name):
-    url = "https://openapi.naver.com/v1/search/blog.json"
-    headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET
-    }
-    params = {"query": place_name, "display": 10}
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        items = response.json().get('items', [])
-        reviews = [{"description": item['description'], "link": item['link']} for item in items]
-        return reviews
-    return []
-
-def filter_reviews(reviews):
-    ad_keywords = ["광고", "화보", "할인", "이용권", "협찬", "제휴"]
-    filtered_reviews = [review for review in reviews if not any(keyword in review['description'] for keyword in ad_keywords)]
-    return filtered_reviews
-
 def kakao_map_html(lat, lon, places):
     places_script = ""
     for place in places:
@@ -103,7 +70,6 @@ def kakao_map_html(lat, lon, places):
     return f"""
     <div id="map" style="width:100%;height:700px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);"></div>
     <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_API_KEY}&libraries=services"></script>
-
     <script>
         var container = document.getElementById('map');
         var options = {{
@@ -114,6 +80,7 @@ def kakao_map_html(lat, lon, places):
         {places_script}
     </script>
     """
+
 
 st.title("🍽️ 음식점 찾는 앱")
 st.markdown("<p style='font-size: 16px;'>가까운 음식점을 찾아보세요. 지도를 통해 위치를 확인하고 음식점 정보를 확인할 수 있어요</p>", unsafe_allow_html=True)
@@ -133,81 +100,3 @@ if st.button("🔍 그 근처 음식점 찾기"):
 if restaurants:
     map_html = kakao_map_html(lat, lon, restaurants)
     html(map_html, height=700, scrolling=True)
-  
-    st.markdown("<h3 style='margin-top: 20px;'>주변 음식점 목록:</h3>", unsafe_allow_html=True)
-    for restaurant in restaurants:
-        naver_image = fetch_naver_images(restaurant['place_name'])
-        reviews = fetch_naver_reviews(restaurant['place_name'])
-        filtered_reviews = filter_reviews(reviews)
-
-        st.markdown(f"""
-<div class="card" style="margin-bottom: 20px; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);">
-    <img src="{naver_image}" class="card-img-top" alt="{restaurant['place_name']}" style="border-radius: 10px 10px 0 0;">
-    <div class="card-body">
-        <h4 class="card-title" style="font-weight: bold; color: #007BFF;">{restaurant['place_name']}</h4>
-        <p class="card-text"><strong>주소:</strong> {restaurant['road_address_name']}</p>
-        <p class="card-text"><strong>전화번호:</strong> {restaurant['phone']}</p>
-        <p class="card-text"><strong>광고 없는 후기:</strong></p>
-        <ul>
-            {''.join([f'<li>{review["description"]} <a href="{review["link"]}" target="_blank" style="color: #007BFF; text-decoration: underline;">후기 자세히 보기</a></li>' for review in filtered_reviews[:3]])}
-        </ul>
-        <details>
-            <summary>후기 더보기</summary>
-            <ul>
-                {''.join([f'<li>{review["description"]} <a href="{review["link"]}" target="_blank" style="color: #007BFF; text-decoration: underline;">후기 자세히 보기</a></li>' for review in filtered_reviews[3:]])}
-            </ul>
-        </details>
-        <div style="margin-top: 20px;">
-            <a href="{restaurant['place_url']}" target="_blank" style="text-decoration: none; background-color: #007BFF; color: white; padding: 10px 15px; border-radius: 5px;">(KAKAO)음식점 정보</a>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-else:
-    st.write("음식점을 찾을 수 없습니다.")
-
-st.markdown("""
-    <style>
-        .stButton>button {
-            width: 100%;
-            height: 50px;
-            font-size: 18px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .stButton>button:hover {
-            background-color: #0056b3;
-        }
-        .card {
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .card-body {
-            padding: 10px;
-        }
-        .card-title {
-            font-weight: bold;
-            color: #007BFF;
-        }
-        .card-text {
-            margin-bottom: 10px;
-        }
-        .btn-primary {
-            text-decoration: none;
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-    </style>
-""", unsafe_allow_html=True)
