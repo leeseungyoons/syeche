@@ -93,10 +93,10 @@ def kakao_map_iframe(lat, lon, places):
     return iframe_html
 
 
-st.title("🍽️❣️ 당신의 후회 없는 맛집을 찾아드립니다 ❣️🍽️")
-st.markdown("<p style='font-size: 16px;'>‼️ 가까운 맛집을 찾아보세요‼️지도를 통해 위치를 확인하고 맛 정보를 확인할 수 있습니다‼️</p>", unsafe_allow_html=True)
+st.title("🍽️❣️ 후회 없는 맛집을 찾아드려요. ❣️🍽️")
+st.markdown("<p style='font-size: 16px;'> 가까운 맛집을 찾아보세요‼️지도를 통해 위치를 확인하고 맛 정보를 확인할 수 있습니다‼️</p>", unsafe_allow_html=True)
 
-address = st.text_input("‼️ 상세한 주소를 입력해주세요 ‼️ : XX 동 XX 구 or 도로명 주소", key='address_input', placeholder='예: 강남구 테헤란로 123')
+address = st.text_input(" 상세한 주소를 입력해주세요 ‼️ : 예 : XX 동 XX 구 or 도로명 주소 ", key='address_input', placeholder='예 : 강남구 테헤란로 123')
 
 restaurants = []
 
@@ -104,7 +104,7 @@ if st.button("🔍 그 근처 찐맛집 찾기 🔍"):
     lat, lon = fetch_coordinates(address)
 
     if lat is None or lon is None:
-        st.error("⁉유효한 주소를 입력해주시겠어요❓")
+        st.error(" 유효한 주소를 입력해주시겠어요❓")
     else:
         restaurants = fetch_restaurants(lat, lon)
 
@@ -145,7 +145,7 @@ if restaurants:
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    st.write(" 음식점을 찾을 수 없어요 😭 .")
+    st.write(" 음식점을 찾을 수 없어요 😭 ")
 
 
 st.markdown("""
