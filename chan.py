@@ -1,6 +1,14 @@
 import streamlit as st
 from streamlit.components.v1 import html
 import requests
+
+KAKAO_API_KEY = "ddae3c29210c477e6e296cbcb8b717a4"
+KAKAO_REST_API_KEY = "9f024f555b6a52a8c7437d577f7deb0f"
+
+NAVER_CLIENT_ID = "SJEuYQimlmeqOEFBVP8_"
+NAVER_CLIENT_SECRET = "jdr3EuEGKg"
+GOOGLE_API_KEY = "AIzaSyDF2PjlBkUupABpDhmte4xXfdWH0kLTaUk"
+
 def fetch_coordinates(address):
     url = "https://dapi.kakao.com/v2/local/search/address.json"
     headers = {"Authorization": f"KakaoAK {KAKAO_REST_API_KEY}"}
